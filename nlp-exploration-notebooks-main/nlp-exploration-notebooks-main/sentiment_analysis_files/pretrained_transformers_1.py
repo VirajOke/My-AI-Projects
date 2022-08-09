@@ -1,0 +1,167 @@
+# Databricks notebook source
+# MAGIC %md 
+# MAGIC # Sentiment analysis using pre-trained deep learning models 
+
+# COMMAND ----------
+
+import sys
+import os
+import pandas as pd
+import numpy as np
+from etl import text_from_dir
+import numpy as np
+import nltk
+import re
+from timeit import default_timer as timer
+import unicodedata
+from transformers import pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+
+# COMMAND ----------
+
+nltk.download('punkt')
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Data preprocessing 
+# MAGIC - Dealing with the special characters <br>
+
+# COMMAND ----------
+
+def preprocess_data(data):
+    keys = list(data)
+    clean_dict = {}
+    for text in enumerate(data.values()):
+        data = str(text)
+        title = keys[text[0]]
+        regex = r'[^A-Za-z.,\s+]'
+        data = re.sub(regex,"", data)
+        data = " ".join(data.split())
+        sentences = nltk.sent_tokenize(data)
+        clean_dict.update({title:sentences})
+        
+    return clean_dict, keys
+
+# COMMAND ----------
+
+def sentiment_analysis(model_name, clean_dict, keys):
+    sentiment_dict = {}
+    for text in enumerate(clean_dict.values()):
+        title = keys[text[0]]
+        start = timer()
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForSequenceClassification.from_pretrained(model_name)
+        classifier = pipeline("sentiment-analysis", model= model, tokenizer= tokenizer)
+        
+        print("Analyzing sentiments for", title)
+        results = classifier(text[1]) 
+        end = timer()
+        print(f'Sentiment analysis for {title} completed in {end-start:.2f} seconds')
+        sentiment_dict.update({title:results})  
+        
+    return sentiment_dict 
+
+# COMMAND ----------
+
+def sentiments_to_df(sentiment_dict):
+    temp = []
+    keys = list(sentiment_dict)
+    for sentiments in enumerate(sentiment_dict.values()):
+        title = keys[sentiments[0]]
+        locals()["final_df_" +str(sentiments[0])] = pd.DataFrame.from_dict(sentiments[1])
+        locals()["final_df_" +str(sentiments[0])] = locals()["final_df_" +str(sentiments[0])].rename(columns= {'label':'sentiments'})
+        locals()["final_df_" +str(sentiments[0])] ['document_name'] = title
+        locals()["final_df_" +str(sentiments[0])] = locals()["final_df_" +str(sentiments[0])][["document_name", "sentiments", "score"]]
+        temp.append(locals()["final_df_" +str(sentiments[0])])
+        data = pd.concat(temp)
+    data.reset_index(drop= "index" , inplace= True)
+    return data
+
+# COMMAND ----------
+
+def plot_sentiments(sentiments_df, keys):
+    #keys = ['The_Apollo_11_Conspiracy.docx', 'James_Webb_Space_Telescope.html']
+    
+    for key in enumerate(keys):
+        temp_df = sentiments_df[sentiments_df['document_name'].str.contains(key[1]) == True]
+        plt.figure(key[0])
+        plt.title(f'Pie chart for {key[1]}')
+        temp_df.groupby(['document_name']).sentiments.value_counts().plot(kind='pie', autopct='%1.0f%%',colors=["#F47A1F","#007CC3"])
+    
+    bar_sentiment = sentiments_df.groupby(['document_name', 'sentiments']).sentiments.count().unstack()
+    bar_sentiment.plot(kind='bar', ylabel = 'Sentiment count', xlabel= 'Document name')
+    plt.xticks(rotation='horizontal') 
+    plt.tight_layout()
+    
+    warnings.filterwarnings("ignore")
+    return plt.show 
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### `get_sentiment()` funtion definition.
+
+# COMMAND ----------
+
+def get_sentiment(data):
+    model_name= "distilbert-base-uncased-finetuned-sst-2-english"
+    clean_dict, keys = preprocess_data(data)
+    final_output = sentiment_analysis(model_name, clean_dict, keys)
+    sentiments_df = sentiments_to_df(final_output)
+    plots = plot_sentiments(sentiments_df, keys)
+    return sentiments_df, plots
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### `get_sentiment()` funcation call.
+
+# COMMAND ----------
+
+input_folder = None
+data_cleaning = True
+
+final_data = text_from_dir(input_folder, data_cleaning)
+sentiments, plots = get_sentiment(final_data)
+
+# COMMAND ----------
+
+sentiments
+
+# COMMAND ----------
+
+# MAGIC %md
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Experiment results for different transformer models
+# MAGIC - To make this block work, temporarily  add an argument `model_name` in `get_sentimet()`
+
+# COMMAND ----------
+
+input_folder = None
+data_cleaning = True
+final_data = text_from_dir(input_folder, data_cleaning)
+models_list= ["nlptown/bert-base-multilingual-uncased-sentiment","distilbert-base-uncased-finetuned-sst-2-english"]
+n = len(models_list)
+for model in enumerate(models_list):
+    sentiments = get_sentiment(final_data, model[1])
+    locals()["test_df_" +str(model[0])] = sentiments_to_df(sentiments)
+    print()
+    print(f'Dataframe of Sentiments generated by {model[1]} model: ')
+    print(locals()["test_df_" + str(model[0])].head())
+    print()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Testing
+
+# COMMAND ----------
+
+

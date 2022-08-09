@@ -104,7 +104,7 @@ def doc_to_text(file_paths, clean=False):
                 # remove words with numbers python: https://stackoverflow.com/a/18082370/4084039
                 extracted_text = re.sub("\S*\d\S*", "", extracted_text).strip()
                 # remove special character: https://stackoverflow.com/a/5843547/4084039
-                extracted_text = re.sub('[^A-Za-z]+', ' ', extracted_text)
+                #extracted_text = re.sub('[^A-Za-z]+', ' ', extracted_text)
                 # remove all the words which often seen common from the sentences
                 # https://www.geeksforgeeks.org/removing-stop-words-nltk-python/
                 #dict_text = ' '.join(e.lower() for e in dict_text.split() if e.lower() not in stopwords)

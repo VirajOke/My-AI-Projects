@@ -7,7 +7,7 @@
 ! pip install pydot -q
 ! pip install pydotplus -q
 ! sudo apt-get install -y python3-dev graphviz libgraphviz-dev pkg-config -q
-! pip install graphviz -q
+! pip install graphviz -q 
 
 # COMMAND ----------
 
@@ -45,6 +45,15 @@ len(final_data)
 # COMMAND ----------
 
 os.environ["TFHUB_MODEL_LOAD_FORMAT"]="UNCOMPRESSED"
+
+# COMMAND ----------
+
+print(tf.config.list_physical_devices())
+import os
+
+if tf.config.list_physical_devices('GPU'):
+    strategy = tf.distribute.MirroredStrategy()
+    print('Using GPU')
 
 # COMMAND ----------
 
@@ -286,18 +295,19 @@ def make_bert_preprocess_model(sentence_features, seq_length=128):
 
 # COMMAND ----------
 
-test_preprocess_model = make_bert_preprocess_model(['my_input1', 'my_input2'])
-test_text = [np.array(['some random test sentence']),
-             np.array(['another sentence'])]
-text_preprocessed = test_preprocess_model(test_text)
+# test_preprocess_model = make_bert_preprocess_model(['my_input1', 'my_input2'])
+# test_text = [np.array(['some random test sentence']),
+#              np.array(['another sentence'])]
+# text_preprocessed = test_preprocess_model(test_text)
 
-print('Keys           : ', list(text_preprocessed.keys()))
-print('Shape Word Ids : ', text_preprocessed['input_word_ids'].shape)
-print('Word Ids       : ', text_preprocessed['input_word_ids'][0, :16])
-print('Shape Mask     : ', text_preprocessed['input_mask'].shape)
-print('Input Mask     : ', text_preprocessed['input_mask'][0, :16])
-print('Shape Type Ids : ', text_preprocessed['input_type_ids'].shape)
-print('Type Ids       : ', text_preprocessed['input_type_ids'][0, :16])
+# print('Keys           : ', list(text_preprocessed.keys()))
+# print('Shape Word Ids : ', text_preprocessed['input_word_ids'].shape)
+# print('Word Ids       : ', text_preprocessed['input_word_ids'][0, :16])
+# print('Shape Mask     : ', text_preprocessed['input_mask'].shape)
+# print('Input Mask     : ', text_preprocessed['input_mask'][0, :16])
+# print('Shape Type Ids : ', text_preprocessed['input_type_ids'].shape)
+# print('Type Ids       : ', text_preprocessed['input_type_ids'][0, :16])
+
 
 # COMMAND ----------
 
@@ -360,9 +370,10 @@ def build_classifier_model(num_classes):
 
 # COMMAND ----------
 
-test_classifier_model = build_classifier_model(2)
+"""test_classifier_model = build_classifier_model(2)
 bert_raw_result = test_classifier_model(text_preprocessed)
-print(tf.sigmoid(bert_raw_result))
+print(tf.sigmoid(bert_raw_result)) 
+"""
 
 # COMMAND ----------
 
@@ -373,7 +384,7 @@ print(tf.sigmoid(bert_raw_result))
 
 # COMMAND ----------
 
-tfds_name = 'glue/cola'  #@param ['glue/cola', 'glue/sst2', 'glue/mrpc', 'glue/qqp', 'glue/mnli', 'glue/qnli', 'glue/rte', 'glue/wnli']
+tfds_name = 'glue/sst2'  #@param ['glue/cola', 'glue/sst2', 'glue/mrpc', 'glue/qqp', 'glue/mnli', 'glue/qnli', 'glue/rte', 'glue/wnli']
 
 tfds_info = tfds.builder(tfds_name).info
 sentence_features = list(tfds_info.features.keys())
@@ -426,26 +437,30 @@ for sample_row in sample_dataset.take(5):
 
 # COMMAND ----------
 
-
 def get_configuration(glue_task):
     loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+
     if glue_task == 'glue/cola':
         metrics = tfa.metrics.MatthewsCorrelationCoefficient(num_classes=2)
     else:
-        metrics = tf.keras.metrics.SparseCategoricalAccuracy('accuracy', dtype=tf.float32)
-
+        metrics = tf.keras.metrics.SparseCategoricalAccuracy(
+                'accuracy', dtype=tf.float32)
     return metrics, loss
 
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC 
+# MAGIC **Note**: Skip to "Load the Saved Model" to avoid retraining
+# MAGIC 
 # MAGIC #### Model training and optimizer- notes:
 # MAGIC - `init_lr = 2e-5` is used to initate the learning rate. Here, ` 2e-5 == 0.00002`
 # MAGIC - TensorFlow Distribution Strategies is their API that allows existing models to be distributed across multiple GPUs (multi-GPU) <br>
 # MAGIC  and multiple machines (multi-worker),by placing existing code inside a block that begins with with `strategy.scope()`.
-# MAGIC - *Warm-up* is a way to reduce the primacy effect of the early training examples. Without it, you may need to run a few extra epochs <br>
+# MAGIC - Warm-up is a way to reduce the primacy effect of the early training examples. Without it, you may need to run a few extra epochs <br>
 # MAGIC to get the convergence desired, as the model un-trains those early superstitions.
-# MAGIC  
+# MAGIC - Learning rate controls the scale at which the weights are updated with respect to the estimated error. <br>
+# MAGIC steps_per_epoch1 = Batches of samples to train
 
 # COMMAND ----------
 
@@ -453,45 +468,52 @@ epochs = 3
 batch_size = 32
 init_lr = 2e-5
 
-print(f'Fine tuning {tfhub_handle_encoder} model') 
+print(f'Fine tuning {tfhub_handle_encoder} model')
 bert_preprocess_model = make_bert_preprocess_model(sentence_features)
 
 with strategy.scope():
+
     # metric have to be created inside the strategy scope
     metrics, loss = get_configuration(tfds_name)
-      
+
     train_dataset, train_data_size = load_dataset_from_tfds(
-            in_memory_ds, tfds_info, train_split, batch_size, bert_preprocess_model)
-            steps_per_epoch = train_data_size // batch_size
-            num_train_steps = steps_per_epoch * epochs
-            num_warmup_steps = num_train_steps // 10
+              in_memory_ds, tfds_info, train_split, batch_size, bert_preprocess_model)
+  
+    steps_per_epoch = train_data_size // batch_size
+    num_train_steps = steps_per_epoch * epochs
+    num_warmup_steps = num_train_steps // 10
 
     validation_dataset, validation_data_size = load_dataset_from_tfds(
-            in_memory_ds, tfds_info, validation_split, batch_size,
-            bert_preprocess_model)
-     
+                in_memory_ds, tfds_info, validation_split, batch_size,
+                bert_preprocess_model)
+      
     validation_steps = validation_data_size // batch_size
 
     classifier_model = build_classifier_model(num_classes)
 
     optimizer = optimization.create_optimizer(
-            init_lr=init_lr,
-            num_train_steps=num_train_steps,
-            num_warmup_steps=num_warmup_steps,
-            optimizer_type='adamw')
+          init_lr=init_lr,
+          num_train_steps=num_train_steps,
+          num_warmup_steps=num_warmup_steps,
+          optimizer_type='adamw')
 
     classifier_model.compile(optimizer=optimizer, loss=loss, metrics=[metrics])
 
     classifier_model.fit(
-             x=train_dataset,
-             validation_data=validation_dataset,
-             steps_per_epoch=steps_per_epoch,
-             epochs=epochs,
-             validation_steps=validation_steps)
+          x=train_dataset,
+          validation_data=validation_dataset,
+          steps_per_epoch=steps_per_epoch,
+          epochs=epochs,
+          validation_steps=validation_steps)
 
 # COMMAND ----------
 
-main_save_path = './my_models'
+# MAGIC %md
+# MAGIC #### Export for inference
+
+# COMMAND ----------
+
+main_save_path = '/dbfs/my_models/'
 bert_type = tfhub_handle_encoder.split('/')[-2]
 saved_model_name = f'{tfds_name.replace("/", "_")}_{bert_type}'
 
@@ -506,17 +528,84 @@ print('Saving', saved_model_path)
 
 # Save everything on the Colab host (even the variables from TPU memory)
 save_options = tf.saved_model.SaveOptions(experimental_io_device='/job:localhost')
-model_for_export.save(saved_model_path, include_optimizer=False,
+model_for_export.save(saved_model_path, include_optimizer=True,
                       options=save_options)
 
 # COMMAND ----------
 
+# MAGIC %md 
+# MAGIC ### Load the saved model 
+
+# COMMAND ----------
+
+# Loading from the MLflow registry isn't working
+"""
+ValueError: Unknown optimizer: AdamWeightDecay. Please ensure this object is passed to the `custom_objects` argument. See https://www.tensorflow.org/guide/keras/save_and_serialize#registering_the_custom_object for details."
+"""
+
+# import mlflow
+# logged_model = 'runs:/5a4a707c9ee74b7eb4a7e6e54427360f/model'
+
+# # Load model as a PyFuncModel.
+# loaded_model = mlflow.pyfunc.load_model(logged_model)
+
+
+# COMMAND ----------
+
+saved_model_path = '/dbfs/my_models/glue_sst2_bert_en_uncased_L-12_H-768_A-12'
+with tf.device('/job:localhost'):
+      reloaded_model = tf.saved_model.load(saved_model_path)
+
+# COMMAND ----------
+
+#@title Utility methods
+
+def prepare(record):
+    model_inputs = [[record[ft]] for ft in sentence_features]
+    return model_inputs
+
+
+def prepare_serving(record):
+    model_inputs = {ft: record[ft] for ft in sentence_features}
+    return model_inputs
+
+def print_bert_results(test, bert_result, dataset_name):
+
+    bert_result_class = tf.argmax(bert_result, axis=1)[0]
+
+    if dataset_name == 'glue/sst2':
+        print('sentence:', test[0])
+        if bert_result_class == 1:
+            print('This sentence has POSITIVE sentiment')
+        else:
+            print('This sentence has NEGATIVE sentiment')
+    else:
+        print('This should be SST2 dataset!')
+        raise ValueError
+
+    print('BERT raw results:', bert_result[0])
+    print()
 
 
 # COMMAND ----------
 
 with tf.device('/job:localhost'):
-    reloaded_model = tf.saved_model.load(saved_model_path)
+    test_dataset = tf.data.Dataset.from_tensor_slices(in_memory_ds[test_split])
+    for test_row in test_dataset.shuffle(1000).map(prepare).take(5):
+        if len(sentence_features) == 1:
+            result = reloaded_model(test_row[0])
+        else:
+            result = reloaded_model(list(test_row))
+        print_bert_results(test_row, result, tfds_name)
+
+# COMMAND ----------
+
+with tf.device('/job:localhost'):
+    serving_model = reloaded_model.signatures['serving_default']
+    for test_row in test_dataset.shuffle(1000).map(prepare_serving).take(5):
+        result = serving_model(**test_row)
+        # The 'prediction' key is the classifier's defined model name.
+        print_bert_results(list(test_row.values()), result['prediction'], tfds_name)
 
 # COMMAND ----------
 
