@@ -71,13 +71,14 @@ def get_upload_component():
                 filetypes= ['docx', 'pdf', 'html', 'txt'],
                 max_file_size=1024,
                 default_style= {
-                        'width': '60%',
+                        'width': '85%',
                         'height': 'auto',
                         'borderWidth': '1px',
                         'borderStyle': 'dashed',
                         'borderRadius': '5px',
-                        'marginLeft': '24%',
+                        'marginLeft': '5%',
                         'marginRight': '20%',
+                        'marginTop': '3%',
                         'color': 'white'
                     },
                 max_files = 10,

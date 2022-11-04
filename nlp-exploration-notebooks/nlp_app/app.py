@@ -13,7 +13,7 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 from xarray import align
 from interactivefunctions import *
-import time
+import pyautogui
 import ast
 import dash
 from dash.exceptions import PreventUpdate
@@ -28,7 +28,7 @@ app.layout = html.Div([
     dbc.Card( 
         dbc.CardBody([
             dbc.Row([
-                dbc.Col([drawText('NLP ToolKit', 'title')], width = 11.5),
+                dbc.Col([drawText('NLP ToolKit', 'title')], id= 'page_title', width = 11.5),
             ],align='center', justify="center"),  
                 
                 html.Br(),
@@ -39,28 +39,31 @@ app.layout = html.Div([
                                 > *Accepted file extensions: txt, docx, html and pdf*
                                 >  
                                 '''
-                            , id= 'upload-markdown'),width = 5),
+                            , className = 'upload-markdown'),width = 6),
 
                     dbc.Col(get_upload_component(), id= 'upload_func_call', width = 6), 
             ], align = 'center',justify = "center", style={"height": "25%"}),  
             html.Br(),
-            html.Br(),
             dbc.Row([
-                dbc.Col(html.Button('Analyze', id='analyze-val', n_clicks= 0, disabled = True),width = 6),
-                dbc.Col(html.Button('Reset', id='reset-val',n_clicks= 0, disabled = False),width = 6)
+                dbc.Col(dcc.Markdown('''
+                                >### 2. Process your documents with AI
+                                > Tasks: Topic extraction, Summarization and Sentiment analysis  
+                                > *It may take a few seconds*
+                                >  
+                                '''
+                            , className= 'upload-markdown'),width = 6),
+                dbc.Col(html.Button('Process', id='analyze-val', n_clicks= 0, disabled = True),width = 3),
+                dbc.Col(html.Button('Reset', id='reset-val',n_clicks= 0, disabled = False),width = 3)
 
-            ], align = 'center', justify = "center"),  
+        ], align = 'center', justify = "center"),  
                 
             html.Br(), 
-
-            dbc.Row([dbc.Col(width = 8, id= 'sum-btn-area')
-            ],align = 'center', justify = "center"),  
+            html.Br(), 
+            dbc.Row([dbc.Col(
+                    dcc.Loading(type='graph',fullscreen =True, children= html.Div(id= 'sum-btn-area', children=None)), width = 8),
+                    ],align = 'center', justify = "center"),  
             html.Br(), 
             
-            dbc.Row([dbc.Col(width = 8, id= 'sum-output-area')
-            ],align = 'center', justify = "center"),  
-            html.Br(), 
-
             html.Div(id = 'summ_modal'),
 
             dbc.Row([dbc.Col(width = 10, id= 'func-call')],align = 'center', justify = "center"),  
@@ -75,10 +78,6 @@ app.layout = html.Div([
                                     style = {'display':'none'})
             )],align = 'right', justify = "right"),  
             html.Br(), 
-            
-            html.Div(id='loading-output'),
-            dcc.Loading(type='graph',fullscreen =True, children=html.Div(
-            id='loading-hidden-div', children=None, style={'display': 'none'})),
 
             dbc.Row([dbc.Col(width = 2, id= 'del_files_call')],align = 'center', justify = "center"),  
             html.Br(), 
@@ -134,16 +133,8 @@ def function_trigger(analyze_clicks, folder_path_value):
                     html.Div(merge_comp)
                 ]),style={'overflow-y': 'scroll','height': '50vh'}
             ), summaries
-
-            
-@app.callback(
-    Output("loading-hidden-div", "children"),
-    [Input("analyze-val","n_clicks")])
-def button_triggers_loading(n_clicks):
-    if 'analyze-val' == ctx.triggered_id:
-        time.sleep(5)
-    else: 
-        return (None)
+    else:
+        return None, None
 
 @app.callback(
     Output('summ_modal', 'children'),
@@ -172,7 +163,6 @@ def display_output(n_clicks, id, value):
                     html.Div('No task executed')
                 ])
 
-
 # ------------ Reset callbacks ------------
 @app.callback(
     Output('del_files_call', 'children'),
@@ -182,8 +172,8 @@ def display_output(n_clicks, id, value):
 )
 def delete_files(n_clicks, session_id):
     if 'reset-val' == ctx.triggered_id:
+        pyautogui.hotkey('f5')
         return delete_uploaded_files(session_id), get_upload_component()
-
 
 # Run app  
 if __name__ == '__main__':

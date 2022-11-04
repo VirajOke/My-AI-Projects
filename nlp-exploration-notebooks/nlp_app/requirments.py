@@ -1,6 +1,6 @@
 import os
 import nltk
-
+os.system('pip install pyautogui')
 os.system('pip install dash')
 os.system('pip install -U spacy')
 os.system('pip install gensim')
