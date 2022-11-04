@@ -1,0 +1,506 @@
+﻿978-1-5386-0930-9/17/$31.00 ©2017 IEEE
+Twitter Fake Account Detection
+Buket Erahin1, Özlem Akta1
+,
+Deniz Klnç2, Ceyhun Akyol2
+1Computer Engineering Department, Dokuz Eylul University, Izmir, Turkey
+buketoksuzoglu@iyte.edu.tr
+ozlem@cs.deu.edu.tr
+2Software Engineering Department, Celal Bayar University, Manisa, Turkey
+deniz.kilinc@cbu.edu.tr
+ceyhunakyol44@gmail.com
+Abstract—Social networking sites such as Twitter and
+Facebook attracts millions of users across the world and their
+interaction with social networking has affected their life. This
+popularity in social networking has led to different problems
+including the possibility of exposing incorrect information to
+their users through fake accounts which results to the spread of
+malicious content. This situation can result to a huge damage in
+the real world to the society.
+?? ?? In our study, we present a classification method for
+detecting the fake accounts on Twitter. We have preprocessed
+our dataset using a supervised discretization technique named
+Entropy Minimization Discretization (EMD) on
+numerical features and analyzed the results of the Naïve Bayes
+algorithm.
+Keywords—machine learning; social media; Twitter; spam
+detection; fake detection
+I. INTRODUCTION
+Social networking phenomenon has grown extremely
+through the last twenty years. During this rise, different types
+of social networking have created many online activities
+which instantly attracted the interests of large number of users.
+On the other hand, they suffer from expanding the number of
+fake accounts that has been created. Fake accounts means that
+the accounts that do not belong to real humans. Fake accounts
+can present fake news, misleading web rating, and spam. Fake
+accounts violate the Twitter Rules. They act in a prohibited
+manner. It can be automated account interactions or attempts
+to deceive or mislead people, for example, posting harmful
+links, aggressive following behaviors like mass following or
+mass unfollowing, creating multiple accounts, posting
+repeatedly to rending topics or duplicate updates, posting links
+with unrelated tweets, and abusing the reply and mention
+functions. Real accounts are accounts which keep the Twitter
+Rules.
+Tweets can be published by sending e-mails, or sending
+SMS text messages. Twitter allows users to publish and
+exchange 140 character messages capacity, directly from
+smart phones using a wide range of Web-based services.
+Twitter spreads information to a large group of users who are
+active in real time.
+One of the main problems in social media is the spammers
+as they can use their accounts for different targets. One of
+these targets is spreading rumors which may affect a
+determined business or even the society in a large scale.
+According to the importance of the effect of social media
+to the society, in this research, we aim to detect the fake
+profile accounts from Twitter online social network to prevent
+the spreading of fake news, advertisements and fake followers.
+We will present the related work, give the description of the
+proposed method with presenting the results’ analysis, and
+finally conclude the research subject and present our future
+work.
+II. RELATED WORK
+Different researches have been presented to detect fake
+accounts with different approaches. In this research, we will
+follow the feature based detection approach [1]. This approach
+is based on monitoring the behavior of the user such as his
+number of tweets, friends, etc. This concept is based on the
+confidence that humans usually behave differently than the
+fakes, therefore, detecting this behavior will lead to the
+revealing of the fake accounts [2]. In this section, we will
+demonstrate some of the works that have been presented in
+this area.
+Reference [3] has reached an accuracy of 84.5% to detect
+spammers by identifying 23 attributes. However, in our
+research, we have reached more accuracy with smaller set of
+attributes. In [4], the set of attributes has been minimized by
+identifying ten attributes for detection. However the result was
+not promising for identifying fake accounts with more
+optimistic perspective that it is able to identify fake tweets
+with higher accuracy by the support of graph techniques.
+Although [5] has presented a minimized set of attributes which
+contained six attributes, however, it is mentioned that it could
+only detects determined types of spammers, they are bagger,
+and poster spammers. [5] Moreover, it is mentioned in [10]
+that Random Forest algorithm [6] is the best results for
+detection for Twitter. Although there are other researches such
+as [7] that claims the success of other algorithms including
+SVM [8], and Bayesian network [9].
+
+Authorized licensed use limited to: University of Ottawa. Downloaded on September 28,2021 at 00:35:07 UTC from IEEE Xplore. Restrictions apply.
+Detecting fake profiles has been presented also by online
+tools, one of these tools is “FakeFollowerCheck” [10], which
+based its check on eight attributes, however, there are not any
+details that describe how these attributes are used or what is
+the technique used for classification. The service does not
+name names, you may only discover the percentage of the fake
+followers. Moreover, other researchers have defined another
+set of criteria to detect the fake twitter account. Reference [11]
+has presented a study to detect fake followers to the account of
+Obama, Romney, and other politicians during the elections for
+the President of US. He used twenty-two criteria for the fake
+followers’ detection, his algorithm based on calculating
+scoring points for each follower account according to the
+criteria set and the account is categorized as human, or fake
+according to the earned points in each category.
+We focused especially on the effect of discretization as a
+preprocessing method on social media data because it is a
+popular approach for handling numeric attributes in Naïve
+Bayes learning. Reference [12] shows that why discretization
+is effective on Naïve Bayes learning. They discuss the factors
+that might affect Naïve Bayes classification error under
+discretization. Discretization is an alternative to probability
+density estimation when Naïve Bayes learning involves
+quantitative attributes like in our social media dataset. Under
+discretization, each value corresponds to an interval. Since
+probabilities of a qualitative attribute can be properly
+estimated from corresponding frequencies by means of good
+training instances, there is no need to assume the probability
+density function. However, because the qualitative data have a
+lower level of measurement than quantitative data [13]
+discretization might suffer from information loss. As a
+summary, they want to maximize the number of intervals in
+order to minimize discretization bias but at the same time
+ensure that each interval contains sufficient training instances
+in order to obtain low discretization variance.
+III. NAIVE BAYES
+The Naive Bayesian classifier provides simple approach,
+with clear semantics, for representing, using and learning
+probabilistic approach [14]. It is used in supervised learning
+tasks. In particularly, it is assumed that the predictive
+attributes are conditionally independent.
+Let C be the random variable denoting the class of an
+instance and let X be the vector of random variables denoting
+the attribute values. Let c represent a particular class label and
+let x be represent a particular attribute value. According to the
+Equation (1), Naïve Bayes predicts the most probable class.
+(1)
+Naïve Bayes algorithm is fast and easy to understand. It
+performs well on multiclass prediction and in case of
+categorical input variables compared to numerical variables.
+Naïve Bayes classifiers are mostly used in text classification
+have higher success rate, therefore it is widely used in spam
+filtering and sentiment analysis.
+To improve the power of Naïve Bayes model, especially if
+continuous features do not have normal distribution we should
+use transformation or different methods to convert it to normal
+distribution. We should remove correlated features because
+highly correlated features would be voted twice in the model
+and this can lead to over inflating importance.
+IV. DISCRETIZATION
+Since most real world applications of classification
+learning involve continuous valued attributes, addressing the
+discretization process has an important value for the solution
+of this problem. Discretization is the conversion of a
+continuous valued attribute into an interval based attribute. It
+is useful for converting numeric values that have not normal
+distribution into nominal values.
+Reference [15] addresses the use of the entropy
+minimization heuristic for discretizing the range of a
+continuous valued attribute into multiple intervals. There are
+types of discretization. We have reviewed three key methods.
+Equal width discretization (EWD) [16] divides the range
+into k intervals of equal width as seen in Equation (2), where k
+is a user defined parameter.
+(2)
+Equal frequency discretization (EFD) [16] divides the
+sorted values into k intervals so that each interval contains
+approximately the same number of training instances, where k
+is a user defined parameter. Both EWD and EFD are used
+because of simplicity and good performance but they fix the
+number of intervals to be produced. EFD and EWD are
+unsupervised discretization techniques which means they do
+not care about the class information when selecting the cut
+points between intervals.
+Entropy minimization discretization (EMD) is a supervised
+discretization technique [17]. It evaluates different candidate
+cut points which are the midpoints of each pair in a sorted
+data. To evaluate the cut points, the data is divided into
+intervals and the class information entropy is calculated. The
+point with the minimum entropy among all candidates is
+selected. This process is done recursively always selecting the
+best cut point. A minimum description length (MDL) is
+applied to decide when to stop. We have used this technique in
+our experiments because of its success. If we are given a set of
+instances S, a feature A, and a partition boundary T, the class
+information entropy of the partition induced by T, E (A, T, S)
+is given by the Equation (3).
+(3)
+For a given feature A, the boundary Tmin , which minimizes
+the entropy function over all possible partition boundaries is
+selected as a binary discretization boundary. This method can
+then be applied recursively to both of the partitions induced by
+Tmin until some stopping condition is achieved.
+
+Authorized licensed use limited to: University of Ottawa. Downloaded on September 28,2021 at 00:35:07 UTC from IEEE Xplore. Restrictions apply.
+Fayyad and Irani [17] make use of the Minimal
+Description Length to determine the stopping criteria.
+Recursive partitioning stops iff the condition in the Equation
+(4) is true.
+(4)
+where N is the number of instances in the set S.
+Information gain and other parameters in the Equation (3)
+is calculated as in the Equations (5).
+ki is the number of class labels represented in the set Si.
+V. TWITTER API
+To make the experiments we have created our own dataset,
+because there is not any public dataset in this field. In order to
+build our dataset, we have used Twitter API. Twitter allows us
+to interact with its data such as tweets and several attributes
+about tweets using Twitter API. By means of a server side
+scripting language requests can be made to Twitter API and
+results are in JSON format that can be read easily.
+There are four main objects in Twitter API. These are:
+Tweets, Users, Entities and Places. Each of these objects have
+many attributes. We have selected some of them to add our
+dataset according to their availability and suitability to our
+dataset.
+Tweets objects are the basic atomic building of all things.
+It has some attributes about general information of the tweets,
+e.g when the tweet was created, how many times the tweet has
+been liked, number of times a tweet has been retweeted etc.
+This attributes are not reachable for the protected accounts.
+Users objects can be anyone or anything. It has some
+attributes about general information of the accounts, e.g the
+number of tweets the user has liked, the number of folloers the
+account has, the number of user the account is following etc.
+This attributes are also reachable for the protected accounts.
+We have selected our features mostly from this attributes
+bcaue of its availability.
+Entities objects provide metadata and additional contextual
+information about content posted on Twitter. It has some
+values, e.g. hashtags, media, urls in the tweet.
+Places objects are named locations with corresponding geo
+coordinates.
+We have selected 16 attributes for our NaiveBayes
+learning algorithm features. The name of the features are listed
+in Table I.
+VI. PROPOSED METHODOLOGY
+A. Dataset Preparation
+A dataset has been prepared for our experiments. It is
+collected manually and investigated by three individuals and
+all the results of these independent examinations are collected
+and the intersection of them, that means the common
+decisions, are selected and put in the dataset. Class decisions
+are made by examining username, background image, profile
+image, follower and friends count, description of the account,
+number of tweets, and content of the tweets. Totally, there are
+501 fake and 499 real account data is collected. We pay
+attention to balance the number of data in each class for the
+sake of the quality of the results. There are 16 features
+gathered from the information of Twitter API. First 13
+attributes from Table I is directly taken from User Object
+attributes of Twitter API and last 3 features are created by us
+using Twitter API. For example, urls_average is calculated
+taking last 20 tweets of the user and finding the number urls
+he/she used to find out the activities of user.
+mentions_average is calculated taking last 20 tweets of the
+user and finding the number mentions he/she used.
+hashtags_average is calculated taking last 20 tweets of the
+user and finding the number hashtags he/she used.
+Description attribute is the length of the user defined string
+describing the account. According to our examinations, fake
+accounts’ descriptions are mostly blank therefore the length of
+the description is zero. Protected attribute indicates that the
+use has chosen to protect their tweets, and they are invisible to
+everyone other than its selected followers. Fake accounts are
+mostly unprotected. Followers count is the number of
+followers the account currently has. Fake accounts have very
+few followers. Friends count is the number of users this
+account is following. Fake accounts have too many
+followings. Statuses count is the number of tweets including
+retweets issued by the user. Accounts, that created by bots,
+share tweets related with trending topics regularly and
+continuously. Therefore, this attribute may be high for fake
+accounts. Favourites count is the number of tweets the user
+has liked in the account’s lifetime. With the aim of increasing
+their followers count, some fake accounts may add many
+tweets to their favourites. Listed count is the number of public
+lists that the user is a member of. Fake accounts tend to
+increase the lists which they are in. Verified attribute is true
+when the user is verified by Twitter. Real accounts are true.
+Profile use background image is true when the user wants
+their uploaded background image to be used. Fake accounts
+are mostly false. Contributors enabled indicates that the user
+has an account with “contributor mode” enabled, allowing for
+tweets issued by the user to be co-authored by another
+account. Default profile attribute is true when the user has not
+altered the theme or background of their user profile. Fake
+accounts are usually true. Default profile image is true, when
+the user is not uploaded their own profile image, default image
+is used. Fake accounts are usually true. Is_translator attribute
+is true, when the user is a participant in Twitter’s translator
+community. Real accounts are usually true. Hashtags average,
+mentions average, and urls average attributes are about the
+contents of the users’ last 20 tweets.
+
+Authorized licensed use limited to: University of Ottawa. Downloaded on September 28,2021 at 00:35:07 UTC from IEEE Xplore. Restrictions apply.
+TABLE I. USED TWITTER API ATTRIBUTES
+Attribute Name Description of the attribute
+Description Length of the user defined string
+describing the account
+Protected When true, indicates that this user
+has chosen to protect their Tweets
+followers_count The number of followers this
+account currently has
+friends_count The number of users this account is
+following
+statuses_count The number of Tweets (including
+retweets) issued by the user.
+favourites_count The number of Tweets this user has
+liked in the account’s lifetime
+listed_count The number of public lists that this
+user is a member of.
+Verified When true, indicates that the user
+has a verified account
+profile_use_background_image
+When true, indicates the user wants
+their uploaded background image
+to be used
+contributors_enabled
+Indicates that the user has an
+account with “contributor mode”
+enabled, allowing for Tweets
+issued by the user to be coauthored
+by another account
+default_profile
+When true, indicates that the user
+has not altered the theme or
+background of their user profile
+default_profile_image
+When true, indicates that the user
+has not uploaded their own profile
+image and a default image is used
+instead
+is_translator
+When true, indicates that the user is
+a participant in Twitter’s translator
+community
+hashtags_average Number of hashtags that user has
+used in last 20 tweets
+mentions_average Number of mentions that user has
+used in last 20 tweets
+urls_average Number of URL links that user has
+used in last 20 tweets
+B. Evaluation Criteria
+There are metrics to evaluate how accurate a machine
+learning algorithm is. A lot of metrics exist to derive a
+conclusion about a machine learning method, e.g. ROC curve,
+F1 score, confusion matrix. In our study, we have used ACC
+(Accuracy), F-Measure, and confusion matrix as the
+performance metric.
+Classification accuracy is the number of correct
+predictions as a ratio of all predictions made.
+F-measure is the harmonic mean of precision and recall.
+Precision is the ratio of items that are predicted as positive to
+that are positive. Recall is the ratio of items that are positive to
+that are predicted as positive by the system.
+Confusion matrix is one of the most common evaluation
+metrics for classification problems, it is also the most misused.
+It is only suitable when there are an equal number of
+observations in each class.
+C. Experimental Results
+In this section, the applied experiments on our dataset are
+discussed. The result of the experiments are shown in the
+Table II, Table III, Table IV and explained. The information
+about the attributes are taken from Twitter API web page [18].
+TABLE II. NAIVE BAYES ACCURACY RESULTS
+NAIVE BAYES
+ACCURACY
+Before
+discretization
+After
+discretization
+Success rates 86.1% 90.9%
+TABLE III. NAIVE BAYES CONFUSION MATRIX RESULTS
+Before discretization After discretization
+a b <-- classified as
+389 112 | a = true
+27 472 | b = false
+a b <-- classified as
+441 60 | a = true
+31 468 | b = false
+TABLE IV. NAIVE BAYES F-MEASURE RESULTS
+Before discretization After discretization
+F-Measure Class
+0,848 true
+0,872 false
+Weighted Avg. 0,860
+F-Measure Class
+0,906 true
+0,911 false
+Weighted Avg. 0,909
+First Experiment: Applying the Naïve Bayes learning
+Algorithm on the Dataset Using All Attributes without
+Discretization
+As a result of the first experiment, 861 of the 1000
+instances are classified correctly with the 86.1% accuracy. 112
+of 501 fake accounts are classified as real and 27 of 499 real
+accounts are classified as fake. Weighted average of the Fmeasure
+is 0,860.
+Second Experiment: Applying the Naïve Bayes learning
+Algorithm on the Dataset after Discretization
+In this experiment, we have applied Entropy Minimization
+Discretization with Minimum Description Length is applied
+on numeric features and as a result of the second experiment,
+901 of the 1000 instances are classified correctly with the
+90.9% accuracy. 60 of 501 fake accounts are classified as real
+and 31 of 499 real accounts are classified as fake. Weighted
+average of the F-measure is increased to 0,909.
+
+Authorized licensed use limited to: University of Ottawa. Downloaded on September 28,2021 at 00:35:07 UTC from IEEE Xplore. Restrictions apply.
+As you can understand from the experimental study
+results, only preprocessing our data using Entropy
+Minimization Discretization (MDE) without any feature
+selection, in Naïve Bayes learning algorithm, there is a major
+boost on the success rate of Naive Bayes results. The reason
+for this increase is that Naive Bayes can work better with
+discrete values than continuous vales.
+VII. CONCLUSION AND FUTURE WORK
+In this research, we proposed an approach for detecting
+fake accounts on Twitter social network. The aim of the
+proposed approach is to show the effects of discretization on
+Naïve Bayes classification algorithm on the social media data.
+We have used Entropy Minimization Discretization (EMD) to
+discretize the data with Minimal Description Length (MDL) as
+the stopping criteria. Some experiments have been conducted
+and we have increased the accuracy with Naïve Bayes from
+85.55% to 90.41% by only preprocessing our dataset using
+discretization technique on selected features. The information
+loss because of discretization is so unimportant that the
+increase of accuracy is very good. We think that it is a large
+increase and a very promising result only using the numeric
+data of social media. By using discretization we overcome the
+problem of normality assumption of continuous data of social
+media datasets used by Naïve Bayes.
+In addition to this study we assume that providing an
+analysis to the tweets content and some feature selection can
+provide more accurate result on the social media data. This
+study can be enhanced applying our fake account detection
+methodology in other social media platforms such as
+Facebook, Instagram, and LinkedIn. We can try some
+similarity algorithms to find the repeated tweets in the fake
+accounts which is very common especially in the fake
+accounts which have many repeated links for advertising
+purposes and compare the results of feature expansion with a
+new similarity feature. We can enlarge the dataset with
+synthetic data and normalize the fields we have used to
+balance the results. We think that feature selection can also
+improve the results and it is intended to make a study on this
+area in a short time.
+
+[1] Yazan Boshmaf et al., "Íntegro: Leveraging Victim Prediction for
+Robust Fake Account Detection in OSNs," in NDSS ’15, 8-11 , San
+Diego, CA, USA, February 2015.
+[2] Vladislav Kontsevoi, Naim Lujan, and Adrian Orozco, "Detecting
+Subversion of Twitter," May 14, 2014.
+[3] Fabr cio Benevenuto, Gabriel Magno, Tiago Rodrigues, and Virg lio
+Almeida, "Detecting spammers on twitter," Collaboration, electronic
+messaging, anti-abuse and spam conference (CEAS). Vol. 6, 2010.
+[4] Supraja Gurajala, Joshua S. White, Brian Hudson, and Jeanna N.
+Matthews, "Fake Twitter accounts: Profile characteristics obtained using
+an activity-based pattern detection approach," in SMSociety '15, July 27
+- 29, Toronto, ON, Canada, 2015
+[5] G. Stringhini, C. Kruegel, and G. Vigna, "Detecting spammers on social
+networks," in Proceedings of the 26th Annual Computer Security
+Applications Conference, 2010, pp. 1–9.
+[6] L. Breiman, "Random forests," Machine Learning, 2001.
+[7] Zhi Yang et al., "Uncovering Social Network Sybils in the Wild," in
+Proceedings of the 2011 ACM SIGCOMM conference on Internet
+measurement conference, November 02-04, 2011, Berlin, Germany,
+2011.
+[8] T. Joachims, Learning to Classify Text Using Support Vector Machines:
+Methods, Theory, and Algorithms. Boston: Kluwer Academic
+Publishers, 2002.
+[9] Christopher D. Manning, Prabhakar Raghavan, and Hinrich Schütze,
+Introduction to Information Retrieval. New York: Cambridge
+University, 2008.
+[10] SocialBakers. (Online) http://www.socialbakers.com/products/
+analytics?ref=fakefollowers-top-bar, last retrieved on 30-10-2015
+[11] M. Camisani-Calzolari. (2012, August ) Analysis of Twitter followers of
+the US Presidential Election candidates: Barack Obama and Mitt
+Romney. (Online). http://digitalevaluations.com/
+[12] Ying Yang, Geoffrey Webb, Discretization for naive-Bayes learning:
+managing discretization bias and variance, Mach Learn (2009) 74: 39–
+74
+[13] Samuels,M.L.,&Witmer,J.A.(1999).Statistics for the life sciences,
+second edition.Prentice-Hall.page10-11.
+[14] George H. John, Pat Langley: Estimating Continuous Distributions in
+Bayesian Classifiers. In: Eleventh Conference on Uncertainty in
+Artificial Intelligence, San Mateo, 338-345, 1995.
+[15] Usama M. Fayyad, Keki B. Irani: Multi-interval discretization of
+continuousvalued attributes for classification learning. In: Thirteenth
+International Joint Conference on Articial Intelligence, 1022-1027,
+1993.
+[16] Catlett, J. (1991). On changing continuous attributes into ordered
+discrete attributes. In Proceedings of the European working session on
+learning (pp. 164–178), 1991.
+[17] Fayyad, U. M., & Irani, K. B. (1993). Multi-interval discretization of
+continuous-valued attributes for classification learning. In Proceedings
+of the 13th international joint conference on artificial intelligence (pp.
+1022–1027), 1993.
+[18] https://dev.twitter.com/overview/api/users
+
+Authorized licensed use limited to: University of Ottawa. Downloaded on September 28,2021 at 00:35:07 UTC from IEEE Xplore. Restrictions apply.
