@@ -10,16 +10,16 @@ Original file is located at
 
 Uses our ETL functions to load docx, html etc. documents to Python text strings, then runs PII detection on the documents and displays the results.
 """
-
+"""
 import os
 os.system('pip install --upgrade pip')
 os.system('pip install presidio-analyzer')
 os.system('python -m spacy download en_core_web_lg')
-os.system('pip install date_detector')
+os.system('pip install date_detector')"""
 
 import pandas as pd
 import numpy as np
-from etl import text_from_dir
+from nlptoolkit import text_from_dir
 from presidio_analyzer import AnalyzerEngine
 import re
 import nltk 
@@ -153,13 +153,14 @@ def get_pii(data):
 
 """### `get_pii()` function call."""
 
-"""input_folder = None
+input_folder = None
 data_cleaning = False
 
 final_data = text_from_dir(input_folder, data_cleaning)
-pii_data, pii_df, date_dict = get_pii(final_data)
+pii_data, pii_df = get_pii(final_data)
+print(pii_df)
 
-"""### Results
+### Results
 #- DF for detected PII from the documents
 """
 

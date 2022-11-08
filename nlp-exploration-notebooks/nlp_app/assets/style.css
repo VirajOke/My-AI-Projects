@@ -5,10 +5,22 @@
     margin-top: 1.5%;
 }
 
-.upload-markdown{
+#upload-markdown{
     color: white;
     margin-left: 25%;
-    margin-right: 10%; 
+    margin-right: 0%; 
+    margin-top: 5%;
+}
+#process-markdown{
+    color: white;
+    margin-left: 20%;
+    margin-right: 0%; 
+    margin-top: 5%;
+}
+#senti-pii-markdown{
+    color: white;
+    margin-left: 20%;
+    margin-right: 0%; 
     margin-top: 5%;
 }
 
@@ -22,37 +34,50 @@ margin-left: 30%;
     background-color:#4CAF50;
     color:white;
     border:none; 
-    width : 80%;
+    width : 75%;
     border-radius :10px; 
     padding:15px;
-    margin-left: 10%;;
+    margin-left: 20%;
     margin-right: 0%;
 }
 #analyze-val:disabled{
     background-color:#d4d4d4;
     color:rgb(87, 87, 87);
     border:none; 
-    width : 80%;
+    width : 75%;
     border-radius :10px; 
     padding:15px;
-    margin-left: 10%;
+    margin-left: 20%;
     margin-right: 0%;
-}
-#folder-path-state{
-    display: None;
-    color: dark;
-}
-
-#del_files_call{
-    display: None;
-    color: dark;
 }
 
 #reset-val{
     background-color:#c90000;
     color:white;
     border:none; 
-    width : 80%;
+    width : 75%;
+    border-radius :10px; 
+    padding:15px;
+    margin-left: 0%;
+    margin-right: 0%;
+}
+
+#analyze-sentiments-btn{
+    background-color:#008CBA;
+    color:white;
+    border:none; 
+    width : 75%;
+    border-radius :10px; 
+    padding:15px;
+    margin-left: 20%;
+    margin-right: 0%;
+}
+
+#analyze-pii-btn{
+    background-color:#008CBA;
+    color:white;
+    border:none; 
+    width : 74%;
     border-radius :10px; 
     padding:15px;
     margin-left: 0%;
@@ -71,8 +96,17 @@ margin-left: 30%;
     text-decoration: underline;
   }
 
+#folder-path-state{
+    display: None;
+    color: dark;
+}
+#del_files_call{
+    display: None;
+    color: dark;
+}
   .topics-str{
     color: white;
     margin-left: 6%;
     margin-top: -0.5%;
   }
+

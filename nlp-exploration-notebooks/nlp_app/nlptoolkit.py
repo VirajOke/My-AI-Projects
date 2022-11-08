@@ -441,7 +441,7 @@ def get_pii(data):
     clean_dict, keys = preprocess_pii_data(data)
     pii_data, date_dict = pii_analysis(clean_dict, keys)
     pii_df = pii_to_df(pii_data, clean_dict, date_dict)
-    return pii_data, pii_df
+    return pii_df
 
 # **************************All topic modeling functions**************************
 def preprocess_topic_text(final_data):

@@ -39,7 +39,7 @@ app.layout = html.Div([
                                 > *Accepted file extensions: txt, docx, html and pdf*
                                 >  
                                 '''
-                            , className = 'upload-markdown'),width = 6),
+                            , id = 'upload-markdown'),width = 6),
 
                     dbc.Col(get_upload_component(), id= 'upload_func_call', width = 6), 
             ], align = 'center',justify = "center", style={"height": "25%"}),  
@@ -51,7 +51,7 @@ app.layout = html.Div([
                                 > *It may take a few seconds*
                                 >  
                                 '''
-                            , className= 'upload-markdown'),width = 6),
+                            , id= 'process-markdown'),width = 5),
                 dbc.Col(html.Button('Process', id='analyze-val', n_clicks= 0, disabled = True),width = 3),
                 dbc.Col(html.Button('Reset', id='reset-val',n_clicks= 0, disabled = False),width = 3)
 
@@ -60,15 +60,31 @@ app.layout = html.Div([
             html.Br(), 
             html.Br(), 
             dbc.Row([dbc.Col(
-                    dcc.Loading(type='graph',fullscreen =True, children= html.Div(id= 'sum-btn-area', children=None)), width = 8),
+                    dcc.Loading(type='graph',fullscreen =True, children= html.Div(id= 'sum-output-area', children=None)), width = 8),
                     ],align = 'center', justify = "center"),  
             html.Br(), 
             
             html.Div(id = 'summ_modal'),
-
-            dbc.Row([dbc.Col(width = 10, id= 'func-call')],align = 'center', justify = "center"),  
+            
+            dbc.Row([
+                dbc.Col(dcc.Markdown('''
+                                >### 3. Analyze Sentiments and PII 
+                                > Sentiments: 1 Star (Most negative) / 5 Stars (Most positive)
+                                > Personally Identifiable Information (PII): 
+                                >  *Person, Email address, Phone number, Location*
+                                '''
+                            , id= 'senti-pii-markdown'),width = 5),
+                dbc.Col(html.Button('Analyze Sentiments', id='analyze-sentiments-btn', n_clicks= 0, disabled = False),width = 3),
+                dbc.Col(html.Button('Analyze PII', id='analyze-pii-btn', n_clicks= 0, disabled = False),width = 3)
+        ], align = 'center', justify = "center", id= 'sentiments-row', style ={'visibility': 'hidden'}),  
+            html.Br(),
+            dbc.Row([dbc.Col(dcc.Loading(type='graph',fullscreen =True, children=html.Div(id= 'sentiment-func-call')),width = 10)]
+            ,align = 'center', justify = "center"),  
             html.Br(), 
-            dbc.Row([dbc.Col(width = 10, id= 'plot-call')],align = 'center', justify = "center"),  
+            dbc.Row([dbc.Col(width = 10, id= 'sentiment-plot-call')],align = 'center', justify = "center"),  
+            html.Br(), 
+            dbc.Row([dbc.Col(dcc.Loading(type='graph',fullscreen =True, children=html.Div(id= 'pii-func-call')),width = 10)]
+            ,align = 'center', justify = "center"),  
             html.Br(), 
             dbc.Row([dbc.Col(dcc.Input(id='folder-path-state',type='text',disabled= True)
             )],align = 'right', justify = "right"),  
@@ -96,23 +112,14 @@ def callback_on_completion(status: du.UploadStatus):
     if status.is_completed == True:
         folder_path = f'uploaded_files/{status.upload_id}'
         return False, folder_path
-
-# ------------ Function callback for topics ------------
-"""@app.callback(
-    Output("func-call", "children"),
-    Input("analyze-val","n_clicks"),
-    State("folder-path-state","value"),
-)
-def function_trigger(analyze_clicks, folder_path_value):
-    if 'analyze-val' == ctx.triggered_id:
-        topics = nlp_tasks(folder_path_value)
-        return topics"""
-# ------------ Function callbacks for summarization ------------
+        
+# ------------ Function callbacks for topics and summarization ------------
 @app.callback(
-    Output("sum-btn-area", "children"),
+    Output("sum-output-area", "children"),
     Output('temp_value_state', 'value'),
+    Output("sentiments-row","style"),
     Input("analyze-val","n_clicks"),
-    State("folder-path-state","value"),
+    State("folder-path-state","value"),  
 )
 def function_trigger(analyze_clicks, folder_path_value):
     if 'analyze-val' == ctx.triggered_id:
@@ -132,7 +139,7 @@ def function_trigger(analyze_clicks, folder_path_value):
                                 style = {'color': 'white','marginLeft': '4%', }),
                     html.Div(merge_comp)
                 ]),style={'overflow-y': 'scroll','height': '50vh'}
-            ), summaries
+            ), summaries, {'visibility': 'visible'}
     else:
         return None, None
 
@@ -162,6 +169,22 @@ def display_output(n_clicks, id, value):
                 return html.Div([
                     html.Div('No task executed')
                 ])
+
+# ------------ Function callback for sentiments ------------
+@app.callback(
+    Output("sentiment-func-call", "children"),
+    Output("sentiment-plot-call", "children"),
+    Output("pii-func-call", "children"),
+    Input("analyze-sentiments-btn","n_clicks"),
+    Input("analyze-pii-btn","n_clicks"), 
+    State("folder-path-state","value"))
+def function_trigger(analyze_sentiment_clicks, analyze_pii_clicks, folder_path_value):
+    if 'analyze-sentiments-btn' == ctx.triggered_id:
+        df, plot = sentiment_analysis(folder_path_value)
+        return df, plot, None
+    if 'analyze-pii-btn' == ctx.triggered_id:
+        pii_df = pii_analysis(folder_path_value)
+        return None, None, pii_df
 
 # ------------ Reset callbacks ------------
 @app.callback(
