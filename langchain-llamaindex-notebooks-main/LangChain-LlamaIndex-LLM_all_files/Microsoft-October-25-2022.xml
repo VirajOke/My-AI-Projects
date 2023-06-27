@@ -1,0 +1,77 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<xbrl xmlns="http://www.xbrl.org/2003/instance" xmlns:dei="http://xbrl.sec.gov/dei/2021q4" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:msft="http://www.microsoft.com/20221025" xmlns:us-gaap="http://fasb.org/us-gaap/2021-01-31" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:xlink="http://www.w3.org/1999/xlink">
+<link:schemaRef xlink:href="msft-20221025.xsd" xlink:type="simple"/>
+<context id="duration_2022-10-25_to_2022-10-25">
+<entity>
+<identifier scheme="http://www.sec.gov/CIK">0000789019</identifier>
+</entity>
+<period>
+<startDate>2022-10-25</startDate>
+<endDate>2022-10-25</endDate>
+</period>
+</context>
+<context id="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_us-gaap-CommonStockMember">
+<entity>
+<identifier scheme="http://www.sec.gov/CIK">0000789019</identifier>
+<segment>
+<xbrldi:explicitMember dimension="us-gaap:StatementClassOfStockAxis">us-gaap:CommonStockMember</xbrldi:explicitMember>
+</segment>
+</entity>
+<period>
+<startDate>2022-10-25</startDate>
+<endDate>2022-10-25</endDate>
+</period>
+</context>
+<context id="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_msft-NotesThreePointOneTwoFivePercentDueDecemberSixTwentyTwentyEightMember">
+<entity>
+<identifier scheme="http://www.sec.gov/CIK">0000789019</identifier>
+<segment>
+<xbrldi:explicitMember dimension="us-gaap:StatementClassOfStockAxis">msft:NotesThreePointOneTwoFivePercentDueDecemberSixTwentyTwentyEightMember</xbrldi:explicitMember>
+</segment>
+</entity>
+<period>
+<startDate>2022-10-25</startDate>
+<endDate>2022-10-25</endDate>
+</period>
+</context>
+<context id="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_msft-NotesTwoPointSixTwoFivePercentDueMayTwoTwentyThirtyThreeMember">
+<entity>
+<identifier scheme="http://www.sec.gov/CIK">0000789019</identifier>
+<segment>
+<xbrldi:explicitMember dimension="us-gaap:StatementClassOfStockAxis">msft:NotesTwoPointSixTwoFivePercentDueMayTwoTwentyThirtyThreeMember</xbrldi:explicitMember>
+</segment>
+</entity>
+<period>
+<startDate>2022-10-25</startDate>
+<endDate>2022-10-25</endDate>
+</period>
+</context>
+<dei:AmendmentFlag contextRef="duration_2022-10-25_to_2022-10-25" id="Hidden_dei_AmendmentFlag_duration_2022-10-25_to_2022-10-25">false</dei:AmendmentFlag>
+<dei:EntityCentralIndexKey contextRef="duration_2022-10-25_to_2022-10-25" id="Hidden_dei_EntityCentralIndexKey_duration_2022-10-25_to_2022-10-25">0000789019</dei:EntityCentralIndexKey>
+<dei:DocumentType contextRef="duration_2022-10-25_to_2022-10-25">8-K</dei:DocumentType>
+<dei:DocumentPeriodEndDate contextRef="duration_2022-10-25_to_2022-10-25">2022-10-25</dei:DocumentPeriodEndDate>
+<dei:EntityRegistrantName contextRef="duration_2022-10-25_to_2022-10-25">Microsoft Corporation</dei:EntityRegistrantName>
+<dei:EntityIncorporationStateCountryCode contextRef="duration_2022-10-25_to_2022-10-25">WA</dei:EntityIncorporationStateCountryCode>
+<dei:EntityFileNumber contextRef="duration_2022-10-25_to_2022-10-25">001-37845</dei:EntityFileNumber>
+<dei:EntityTaxIdentificationNumber contextRef="duration_2022-10-25_to_2022-10-25">91-1144442</dei:EntityTaxIdentificationNumber>
+<dei:EntityAddressAddressLine1 contextRef="duration_2022-10-25_to_2022-10-25">One Microsoft Way</dei:EntityAddressAddressLine1>
+<dei:EntityAddressCityOrTown contextRef="duration_2022-10-25_to_2022-10-25">Redmond</dei:EntityAddressCityOrTown>
+<dei:EntityAddressStateOrProvince contextRef="duration_2022-10-25_to_2022-10-25">WA</dei:EntityAddressStateOrProvince>
+<dei:EntityAddressPostalZipCode contextRef="duration_2022-10-25_to_2022-10-25">98052-6399</dei:EntityAddressPostalZipCode>
+<dei:CityAreaCode contextRef="duration_2022-10-25_to_2022-10-25">425</dei:CityAreaCode>
+<dei:LocalPhoneNumber contextRef="duration_2022-10-25_to_2022-10-25">882-8080</dei:LocalPhoneNumber>
+<dei:WrittenCommunications contextRef="duration_2022-10-25_to_2022-10-25">false</dei:WrittenCommunications>
+<dei:SolicitingMaterial contextRef="duration_2022-10-25_to_2022-10-25">false</dei:SolicitingMaterial>
+<dei:PreCommencementTenderOffer contextRef="duration_2022-10-25_to_2022-10-25">false</dei:PreCommencementTenderOffer>
+<dei:PreCommencementIssuerTenderOffer contextRef="duration_2022-10-25_to_2022-10-25">false</dei:PreCommencementIssuerTenderOffer>
+<dei:Security12bTitle contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_us-gaap-CommonStockMember">Common stock, $0.00000625 par value per share</dei:Security12bTitle>
+<dei:TradingSymbol contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_us-gaap-CommonStockMember">MSFT</dei:TradingSymbol>
+<dei:SecurityExchangeName contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_us-gaap-CommonStockMember">NASDAQ</dei:SecurityExchangeName>
+<dei:Security12bTitle contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_msft-NotesThreePointOneTwoFivePercentDueDecemberSixTwentyTwentyEightMember">3.125% Notes due 2028</dei:Security12bTitle>
+<dei:TradingSymbol contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_msft-NotesThreePointOneTwoFivePercentDueDecemberSixTwentyTwentyEightMember">MSFT</dei:TradingSymbol>
+<dei:SecurityExchangeName contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_msft-NotesThreePointOneTwoFivePercentDueDecemberSixTwentyTwentyEightMember">NASDAQ</dei:SecurityExchangeName>
+<dei:Security12bTitle contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_msft-NotesTwoPointSixTwoFivePercentDueMayTwoTwentyThirtyThreeMember">2.625% Notes due 2033</dei:Security12bTitle>
+<dei:TradingSymbol contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_msft-NotesTwoPointSixTwoFivePercentDueMayTwoTwentyThirtyThreeMember">MSFT</dei:TradingSymbol>
+<dei:SecurityExchangeName contextRef="duration_2022-10-25_to_2022-10-25_us-gaap-StatementClassOfStockAxis_msft-NotesTwoPointSixTwoFivePercentDueMayTwoTwentyThirtyThreeMember">NASDAQ</dei:SecurityExchangeName>
+<dei:EntityEmergingGrowthCompany contextRef="duration_2022-10-25_to_2022-10-25">false</dei:EntityEmergingGrowthCompany>
+</xbrl>
