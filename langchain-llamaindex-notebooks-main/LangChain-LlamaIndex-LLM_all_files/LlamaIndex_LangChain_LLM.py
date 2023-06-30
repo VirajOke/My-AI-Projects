@@ -467,47 +467,31 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.docstore.document import Document
 from langchain.document_loaders import DirectoryLoader
-
-# if len(get_available_gpus()) == 0:
-#   Exception("Running dolly without GPU will be slow. We recommend you switch to a Single Node cluster with at least 1 GPU to properly run this demo.")
-
-gardening_vector_db_path = "/dbfs"+demo_path+"/vector_db"
-
-hf_embed = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
-path = '/Workspace/Repos/virajsunil.oke@ssc-spc.gc.ca/LangChain-LlamaIndex-LLM/LangChain-LlamaIndex-LLM_all_files/data/xml_sample_documents/'
-loader = DirectoryLoader(path, glob="**/*.xml")
-docs = loader.load()
-vectordb = Chroma.from_documents(documents=docs, 
-                                 embedding=hf_embed, 
-                                 persist_directory=gardening_vector_db_path
-)
-
-# COMMAND ----------
-
-# def get_similar_docs(query, similar_doc_count):
-#     return vectordb.similarity_search(query, k=similar_doc_count)
-
-# query = "what are the documents about?"
-# context = ' '
-# for doc in get_similar_docs(query, 2):
-#     context += doc.page_content 
-# print(context)
-
-# COMMAND ----------
-
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 import torch
 from langchain import PromptTemplate
 from langchain.llms import HuggingFacePipeline
 from langchain.chains.question_answering import load_qa_chain
- 
-def build_qa_chain():
-    torch.cuda.empty_cache()
-    model_name = "databricks/dolly-v2-7b" # can use dolly-v2-3b or dolly-v2-7b for smaller model and faster inferences.
- 
-    # Increase max_new_tokens for a longer response
-    # Other settings might give better results! Play around
-    instruct_pipeline = pipeline(model=model_name, 
+
+# COMMAND ----------
+
+class opensourcellm:
+    gardening_vector_db_path = "/dbfs"+demo_path+"/vector_db"
+    hf_embed = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+
+    def __init__(self, path):
+        self.path = path
+        loader = DirectoryLoader(self.path, glob="**/*.xml")
+        docs = loader.load()
+        self.vectordb = Chroma.from_documents(documents=docs, 
+                                        embedding=self.hf_embed, 
+                                        persist_directory=self.gardening_vector_db_path)
+    
+    def build_qa_chain(self):
+        torch.cuda.empty_cache()
+        model_name = "databricks/dolly-v2-7b" 
+        # Increase max_new_tokens for a longer response
+        instruct_pipeline = pipeline(model=model_name, 
                                 torch_dtype=torch.bfloat16, 
                                 trust_remote_code=True, 
                                 device_map="auto", 
@@ -515,62 +499,55 @@ def build_qa_chain():
                                 max_new_tokens=256, 
                                 top_p=0.95, 
                                 top_k=50
-    )
-    # Note: if you use dolly 12B or smaller model but a GPU with less than 24GB RAM, use 8bit. This requires %pip install bitsandbytes
-    # instruct_pipeline = pipeline(model=model_name, load_in_8bit=True, trust_remote_code=True, device_map="auto")
-    # For GPUs without bfloat16 support, like the T4 or V100, use torch_dtype=torch.float16 below
-    # model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.float16, trust_remote_code=True)
- 
-    # Defining our prompt content.
-    # langchain will load our similar documents as {context}
-    template = """Below is an instruction that describes a task. Write a response that appropriately completes the request.
- 
-    Instruction: 
-    Use only information in the following paragraphs to answer the question at the end. Explain the answer with reference to these paragraphs. 
-    If you don't know, say that you do not know.
+        )
+        template = """Below is an instruction that describes a task. 
+        Write a response that appropriately completes the request.
     
-    {context}
-    
-    Question: {question}
-    
-    Response:
-    """
-    prompt = PromptTemplate(input_variables=['context', 'question'], template=template)
-    
-    hf_pipe = HuggingFacePipeline(pipeline=instruct_pipeline)
-    # Set verbose=True to see the full prompt:
-    return load_qa_chain(llm=hf_pipe, chain_type="stuff", prompt=prompt, verbose=True)
+        Instruction: 
+        Use only information in the following paragraphs to answer the question at the end. 
+        Explain the answer with reference to these paragraphs. 
+        If you don't know, say that you do not know.
+        
+        {context}
+        
+        Question: {question}
+        
+        Response:
+        """
+        prompt = PromptTemplate(input_variables=['context', 'question'],
+                            template=template
+        )
+        hf_pipe = HuggingFacePipeline(pipeline=instruct_pipeline)
+        return load_qa_chain(llm=hf_pipe, chain_type="stuff", prompt=prompt,verbose=True)
 
-# COMMAND ----------
-
-qa_chain = build_qa_chain()
-
-# COMMAND ----------
-
- # Block A
- def answer_question(question):
-    similar_docs = get_similar_docs(question, similar_doc_count=2)
-    result = qa_chain({"input_documents": similar_docs, "question": question})
-    result_html = f"<p><blockquote style=\"font-size:24\">{question}</blockquote></p>"
-    result_html += f"<p><blockquote style=\"font-size:18px\">{result['output_text']}</blockquote></p>"
-    result_html += "<p><hr/></p>"
-    for d in result["input_documents"]:
-        source_id = d.metadata["source"]
-        result_html += f"<p><blockquote>{d.page_content}<br/>(Source: <a href=\"https://gardening.stackexchange.com/a/{source_id}\">{source_id}</a>)</blockquote></p>"
-    displayHTML(result_html)
- 
- # Merge the block A and B
- # Block B
- def get_similar_docs(query, similar_doc_count):
+    def get_similar_docs(self, query, similar_doc_count):
         return vectordb.similarity_search(query, k=similar_doc_count)
+    
+    def answer_question(self, question):
+        qa_chain = self.build_qa_chain()
+        similar_docs = self.get_similar_docs(question, similar_doc_count=2)
+        result = qa_chain({"input_documents": similar_docs, "question": question})
+        result_html = f"<p><blockquote style=\"font-size:24\">{question}</blockquote></p>"
+        result_html += f"<p><blockquote style=\"font-size:18px\">{result['output_text']}</blockquote></p>"
+        result_html += "<p><hr/></p>"
+        for d in result["input_documents"]:
+            source_id = d.metadata["source"]
+            result_html += f"<p><blockquote>{d.page_content}<br/>(Source: <a href=\"https://gardening.stackexchange.com/a/{source_id}\">{source_id}</a>)</blockquote></p>"
+        return displayHTML(result_html)
 
-    query = "what are the documents about?"
-    context = ' '
-    for doc in get_similar_docs(query, 2):
-        context += doc.page_content 
-        print(context)
+# COMMAND ----------
 
-    query = "what are the documents about?"
+path = '/Workspace/Repos/virajsunil.oke@ssc-spc.gc.ca/LangChain-LlamaIndex-LLM/LangChain-LlamaIndex-LLM_all_files/data/xml_sample_documents/'
+openllmobj = opensourcellm(path)
+
+# COMMAND ----------
+
+question = "what are the documents about?"
+openllmobj.answer_question(question)
+
+# COMMAND ----------
+
+
 
 # COMMAND ----------
 
@@ -579,7 +556,3 @@ qa_chain = build_qa_chain()
 # COMMAND ----------
 
 dbdemos.install('llm-dolly-chatbot')
-
-# COMMAND ----------
-
-
