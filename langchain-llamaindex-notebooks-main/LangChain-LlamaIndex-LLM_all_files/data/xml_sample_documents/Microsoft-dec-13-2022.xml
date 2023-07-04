@@ -3,45 +3,6 @@ This XML file does not appear to have any style information associated with it. 
 <link:schemaRef xlink:href="msft-20211026.xsd" xlink:type="simple"/>
 <context id="duration_2021-10-26_to_2021-10-26">
 <entity>
-<identifier scheme="http://www.sec.gov/CIK">0000789019</identifier>
-</entity>
-<period>
-<startDate>2021-10-26</startDate>
-<endDate>2021-10-26</endDate>
-</period>
-</context>
-<context id="duration_2021-10-26_to_2021-10-26_us-gaap-StatementClassOfStockAxis_us-gaap-CommonStockMember">
-<entity>
-<identifier scheme="http://www.sec.gov/CIK">0000789019</identifier>
-<segment>
-<xbrldi:explicitMember dimension="us-gaap:StatementClassOfStockAxis">us-gaap:CommonStockMember</xbrldi:explicitMember>
-</segment>
-</entity>
-<period>
-<startDate>2021-10-26</startDate>
-<endDate>2021-10-26</endDate>
-</period>
-</context>
-<context id="duration_2021-10-26_to_2021-10-26_us-gaap-StatementClassOfStockAxis_msft-NotesThreePointOneTwoFivePercentDueDecemberSixTwentyTwentyEightMember">
-<entity>
-<identifier scheme="http://www.sec.gov/CIK">0000789019</identifier>
-<segment>
-<xbrldi:explicitMember dimension="us-gaap:StatementClassOfStockAxis">msft:NotesThreePointOneTwoFivePercentDueDecemberSixTwentyTwentyEightMember</xbrldi:explicitMember>
-</segment>
-</entity>
-<period>
-<startDate>2021-10-26</startDate>
-<endDate>2021-10-26</endDate>
-</period>
-</context>
-<context id="duration_2021-10-26_to_2021-10-26_us-gaap-StatementClassOfStockAxis_msft-NotesTwoPointSixTwoFivePercentDueMayTwoTwentyThirtyThreeMember">
-<entity>
-<identifier scheme="http://www.sec.gov/CIK">0000789019</identifier>
-<segment>
-<xbrldi:explicitMember dimension="us-gaap:StatementClassOfStockAxis">msft:NotesTwoPointSixTwoFivePercentDueMayTwoTwentyThirtyThreeMember</xbrldi:explicitMember>
-</segment>
-</entity>
-<period>
 <startDate>2021-10-26</startDate>
 <endDate>2021-10-26</endDate>
 </period>
@@ -58,8 +19,6 @@ This XML file does not appear to have any style information associated with it. 
 <dei:EntityAddressCityOrTown contextRef="duration_2021-10-26_to_2021-10-26">Redmond</dei:EntityAddressCityOrTown>
 <dei:EntityAddressStateOrProvince contextRef="duration_2021-10-26_to_2021-10-26">WA</dei:EntityAddressStateOrProvince>
 <dei:EntityAddressPostalZipCode contextRef="duration_2021-10-26_to_2021-10-26">98052-6399</dei:EntityAddressPostalZipCode>
-<dei:CityAreaCode contextRef="duration_2021-10-26_to_2021-10-26">425</dei:CityAreaCode>
-<dei:LocalPhoneNumber contextRef="duration_2021-10-26_to_2021-10-26">882-8080</dei:LocalPhoneNumber>
 <dei:WrittenCommunications contextRef="duration_2021-10-26_to_2021-10-26">false</dei:WrittenCommunications>
 <dei:SolicitingMaterial contextRef="duration_2021-10-26_to_2021-10-26">false</dei:SolicitingMaterial>
 <dei:PreCommencementTenderOffer contextRef="duration_2021-10-26_to_2021-10-26">false</dei:PreCommencementTenderOffer>

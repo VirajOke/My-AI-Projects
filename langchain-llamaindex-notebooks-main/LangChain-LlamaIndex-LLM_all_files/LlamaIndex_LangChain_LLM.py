@@ -489,7 +489,7 @@ class opensourcellm:
     
     def build_qa_chain(self):
         torch.cuda.empty_cache()
-        model_name = "databricks/dolly-v2-7b" 
+        model_name = "databricks/dolly-v2-3b" 
         # Increase max_new_tokens for a longer response
         instruct_pipeline = pipeline(model=model_name, 
                                 torch_dtype=torch.bfloat16, 
@@ -500,6 +500,7 @@ class opensourcellm:
                                 top_p=0.95, 
                                 top_k=50
         )
+
         template = """Below is an instruction that describes a task. 
         Write a response that appropriately completes the request.
     
@@ -521,11 +522,11 @@ class opensourcellm:
         return load_qa_chain(llm=hf_pipe, chain_type="stuff", prompt=prompt,verbose=True)
 
     def get_similar_docs(self, query, similar_doc_count):
-        return vectordb.similarity_search(query, k=similar_doc_count)
+        return self.vectordb.similarity_search(query, k=similar_doc_count)
     
     def answer_question(self, question):
         qa_chain = self.build_qa_chain()
-        similar_docs = self.get_similar_docs(question, similar_doc_count=2)
+        similar_docs = self.get_similar_docs(question, similar_doc_count=1)
         result = qa_chain({"input_documents": similar_docs, "question": question})
         result_html = f"<p><blockquote style=\"font-size:24\">{question}</blockquote></p>"
         result_html += f"<p><blockquote style=\"font-size:18px\">{result['output_text']}</blockquote></p>"
@@ -542,16 +543,13 @@ openllmobj = opensourcellm(path)
 
 # COMMAND ----------
 
-question = "what are the documents about?"
+# import os
+# os.environ["PYTORCH_CUDA_ALLOC_CONF"] = 'max_split_size_mb:512'
+
+# COMMAND ----------
+
+question = "Can you list down important dates?"
 openllmobj.answer_question(question)
-
-# COMMAND ----------
-
-
-
-# COMMAND ----------
-
-
 
 # COMMAND ----------
 
