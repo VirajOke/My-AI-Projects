@@ -486,7 +486,16 @@ class opensourcellm:
         self.vectordb = Chroma.from_documents(documents=docs, 
                                         embedding=self.hf_embed, 
                                         persist_directory=self.gardening_vector_db_path)
-    
+    # Delete the below function later
+    def preprocess_text(self):
+        text = self.docs[0].get_text()
+        tree = etree.parse(text)
+        notags = etree.tostring(tree, encoding='utf8', method='text')
+        regex = r'\s+'
+        text = re.sub(regex,"", notags)
+        print(type(text))
+        return text
+
     def build_qa_chain(self):
         torch.cuda.empty_cache()
         model_name = "databricks/dolly-v2-3b" 
@@ -548,9 +557,18 @@ openllmobj = opensourcellm(path)
 
 # COMMAND ----------
 
-question = "Can you list down important dates?"
+question = "Which organization names are mentioned?"
+openllmobj.answer_question(question)
+
+# COMMAND ----------
+
+question = "Can you summarize the document?"
 openllmobj.answer_question(question)
 
 # COMMAND ----------
 
 dbdemos.install('llm-dolly-chatbot')
+
+# COMMAND ----------
+
+
