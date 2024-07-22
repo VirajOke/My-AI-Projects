@@ -76,7 +76,7 @@ from langchain import PromptTemplate, LLMChain
 
 # COMMAND ----------
 
-os.environ['OPENAI_API_KEY'] = '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'  
+os.environ['OPENAI_API_KEY'] = 'KEY'  
 
 # COMMAND ----------
 
