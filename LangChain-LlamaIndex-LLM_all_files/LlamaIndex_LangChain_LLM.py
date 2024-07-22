@@ -120,7 +120,7 @@ def create_index(path):
 
 # COMMAND ----------
 
-data_path= '/Workspace/Repos/virajsunil.oke@ssc-spc.gc.ca/LangChain-LlamaIndex-LLM/LangChain-LlamaIndex-LLM_all_files/data/Green_procurement/'
+data_path= 'DOC_PATH'
 index = create_index(data_path)
 
 # COMMAND ----------
@@ -158,7 +158,7 @@ print(repsonse.response)
 
 # COMMAND ----------
 
-data_path= '/Workspace/Repos/virajsunil.oke@ssc-spc.gc.ca/LangChain-LlamaIndex-LLM/LangChain-LlamaIndex-LLM_all_files/data/xml_sample_documents/'
+data_path= 'PATH'
 index = create_index(data_path)
 
 # COMMAND ----------
@@ -243,7 +243,7 @@ def huggingface_LLM(path):
 
 # COMMAND ----------
 
-path= '/Workspace/Repos/virajsunil.oke@ssc-spc.gc.ca/LangChain-LlamaIndex-LLM/LangChain-LlamaIndex-LLM_all_files/data/xml_sample_documents/'
+path= 'PATH'
 index= huggingface_LLM(path)
 
 # COMMAND ----------
@@ -315,7 +315,7 @@ class ExtractiveQA():
 
 # COMMAND ----------
 
-path = '/Workspace/Repos/virajsunil.oke@ssc-spc.gc.ca/LangChain-LlamaIndex-LLM/LangChain-LlamaIndex-LLM_all_files/data/xml_sample_documents/'
+path = 'PATH'
 # Dictonaries with open source models and respective pipeline tasks to try out.
 open_source_models = {
         'distilbert':'distilbert-base-uncased-distilled-squad',
@@ -420,7 +420,7 @@ class OpenSourceModels():
 
 # COMMAND ----------
 
-path = '/Workspace/Repos/virajsunil.oke@ssc-spc.gc.ca/LangChain-LlamaIndex-LLM/LangChain-LlamaIndex-LLM_all_files/data/xml_sample_documents/'
+path = 'PATH'
 # Dictonaries with open source models and respective pipeline tasks to try out.
 open_source_models = {
         'flan_t5_xl':'google/flan-t5-xl',
@@ -547,7 +547,7 @@ class opensourcellm:
 
 # COMMAND ----------
 
-path = '/Workspace/Repos/virajsunil.oke@ssc-spc.gc.ca/LangChain-LlamaIndex-LLM/LangChain-LlamaIndex-LLM_all_files/data/xml_sample_documents/'
+path = 'PATH'
 openllmobj = opensourcellm(path)
 
 # COMMAND ----------
